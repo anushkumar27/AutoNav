@@ -9,6 +9,7 @@
 #include <mavros_msgs/SetMode.h>
 #include <mavros_msgs/State.h>
 #include "auto_nav_bridge/land.h"
+#include "auto_nav_bridge/disarm.h"
 
 // Current State
 mavros_msgs::State current_state;
@@ -22,10 +23,19 @@ void dest_pose_cb(const geometry_msgs::PoseStamped::ConstPtr& msg){
 }
 
 bool should_land = false;
-void land_srv_cb(auto_nav_bridge::land::Request &req, auto_nav_bridge::land::Response &res) {
+bool land_srv_cb(auto_nav_bridge::land::Request &req, auto_nav_bridge::land::Response &res) {
     should_land = true;
     res.success = true;
     res.message = "Land command recieved";
+    return true;
+}
+
+bool should_disarm = false;
+bool disarm_srv_cb(auto_nav_bridge::disarm::Request &req, auto_nav_bridge::disarm::Response &res) {
+    // TODO
+    should_disarm = true;
+    res.success = true;
+    res.message = "Disarm command recieved";
     return true;
 }
 
@@ -88,7 +98,7 @@ int main(int argc, char **argv)
     ros::Time last_request = ros::Time::now();
 
     while(ros::ok()){
-        if( current_state.mode != "OFFBOARD" && !should_land &&
+        if( current_state.mode != "OFFBOARD" && !should_land && !should_disarm && 
             (ros::Time::now() - last_request > ros::Duration(5.0))) {
             if( set_mode_client.call(set_mode) &&
                 set_mode.response.mode_sent){
@@ -101,7 +111,16 @@ int main(int argc, char **argv)
             set_mode.request.custom_mode = "AUTO.LAND";
             if( set_mode_client.call(set_mode) &&
                 set_mode.response.mode_sent){
-                ROS_INFO("Offboard enabled");
+                ROS_INFO("Landing");
+            }
+            last_request = ros::Time::now();
+        }
+        else if( current_state.armed && should_disarm &&
+            (ros::Time::now() - last_request > ros::Duration(5.0))) {
+            arm_cmd.request.value = false;
+            if( arming_client.call(arm_cmd) &&
+                arm_cmd.response.success){
+                ROS_INFO("Vehicle disarmed");
             }
             last_request = ros::Time::now();
         }
@@ -117,7 +136,7 @@ int main(int argc, char **argv)
         }
 
         // TODO: Check if this if block is really necessary
-        if(!should_land) {
+        if(!should_land && !should_disarm) {
             // Publish the current pose
             local_pos_pub.publish(pose);
 

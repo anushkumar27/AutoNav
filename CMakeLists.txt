@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   mavros_extras
   roscpp
   std_msgs
+  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -63,6 +64,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_service_files(
     FILES
     land.srv
+    disarm.srv
 )
 
 ## Generate actions in the 'action' folder
