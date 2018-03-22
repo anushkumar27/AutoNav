@@ -30,7 +30,7 @@ rosdep update
 # 2. Mavros & Mavros Extras
 ```sh
 sudo apt-get install ros-kinetic-mavros ros-kinetic-mavros-extras
-``
+```
 
 # Gazebo Install
 Install Instructions:
