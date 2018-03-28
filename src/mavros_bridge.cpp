@@ -20,6 +20,7 @@ void state_cb(const mavros_msgs::State::ConstPtr& msg){
 geometry_msgs::PoseStamped dest_pose;
 void dest_pose_cb(const geometry_msgs::PoseStamped::ConstPtr& msg){
     dest_pose = *msg;
+    ROS_INFO("Dest point: %f %f %f", dest_pose.pose.position.x, dest_pose.pose.position.y, dest_pose.pose.position.z);
 }
 
 bool should_land = false;
@@ -80,7 +81,7 @@ int main(int argc, char **argv)
     geometry_msgs::PoseStamped pose;
     pose.pose.position.x = 0;
     pose.pose.position.y = 0;
-    pose.pose.position.z = 0;
+    pose.pose.position.z = 1;
 
     // Send a few setpoints before starting
     for(int i = 100; ros::ok() && i > 0; --i){
