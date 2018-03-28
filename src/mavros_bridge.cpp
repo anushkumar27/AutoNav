@@ -23,17 +23,20 @@ void dest_pose_cb(const geometry_msgs::PoseStamped::ConstPtr& msg){
     ROS_INFO("Dest point: %f %f %f", dest_pose.pose.position.x, dest_pose.pose.position.y, dest_pose.pose.position.z);
 }
 
+// Land Service
 bool should_land = false;
 bool land_srv_cb(auto_nav_bridge::land::Request &req, auto_nav_bridge::land::Response &res) {
+    ROS_INFO("Land command received");
     should_land = true;
     res.success = true;
     res.message = "Land command recieved";
     return true;
 }
 
+// Disarm service
 bool should_disarm = false;
 bool disarm_srv_cb(auto_nav_bridge::disarm::Request &req, auto_nav_bridge::disarm::Response &res) {
-    // TODO
+    ROS_INFO("Disarm command received");
     should_disarm = true;
     res.success = true;
     res.message = "Disarm command recieved";
@@ -55,10 +58,16 @@ int main(int argc, char **argv)
     // To get destination pose from Command Nodes
     ros::Subscriber dest_pose_sub = nh.subscribe<geometry_msgs::PoseStamped>
             ("auto_nav/mavros_bridge/pose", 10, dest_pose_cb);
+    
     // PUBLISHER
     // To publish the raw destination pose to the FCU
     ros::Publisher local_pos_pub = nh.advertise<geometry_msgs::PoseStamped>
             ("mavros/setpoint_position/local", 10);
+    
+    // SERVICES (LANDING AND DISARM)
+    ros::ServiceServer land_service = nh.advertiseService("auto_nav/land", land_srv_cb);
+    ros::ServiceServer disarm_service = nh.advertiseService("auto_nav/disarm", disarm_srv_cb);
+
     // SERVICE CLIENTS
     // To ARM the FCU
     ros::ServiceClient arming_client = nh.serviceClient<mavros_msgs::CommandBool>
