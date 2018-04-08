@@ -16,10 +16,14 @@ mavros_msgs::State current_state;
 void state_cb(const mavros_msgs::State::ConstPtr& msg){
     current_state = *msg;
 }
+
 // Destination Pose
 geometry_msgs::PoseStamped dest_pose;
 void dest_pose_cb(const geometry_msgs::PoseStamped::ConstPtr& msg){
     dest_pose = *msg;
+    float temp = dest_pose.pose.position.x;
+    dest_pose.pose.position.x = dest_pose.pose.position.y;
+    dest_pose.pose.position.y = -1.0f * temp;
     ROS_INFO("Dest point: %f %f %f", dest_pose.pose.position.x, dest_pose.pose.position.y, dest_pose.pose.position.z);
 }
 
