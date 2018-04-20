@@ -94,9 +94,13 @@ sudo make install
 cd ..
 ```
 ```sh
-cd eProsima_FastRTPS-1.5.0-Linux; ./configure --libdir=/usr/lib; make -j2; sudo ```
+cd eProsima_FastRTPS-1.5.0-Linux; ./configure --libdir=/usr/lib
+```
 ```sh
-make install
+make -j2
+```
+```sh
+sudo make install
 ```
 ```sh
 cd ..
