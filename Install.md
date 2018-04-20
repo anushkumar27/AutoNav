@@ -40,7 +40,7 @@ sudo usermod -a -G dialout $USER
 Log out and log in.
 
 ```sh
-`sudo apt-get remove modemmanager` 
+sudo apt-get remove modemmanager
 ```
 To remove modemmanager since it can interfere in serial communications.
 ## 3.2 Install common dependencies
