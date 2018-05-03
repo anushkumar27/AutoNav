@@ -1,6 +1,6 @@
 # Auto_Nav_Bridge
 
-This ROS package provides autonomous navigation capabilities to Mavlink based FCUs.
+The bridge module, responsible for low-level FCU communications over MAVLink protocol, and for arming, disarming, and mode switching functionalities.
 
 ## Description
 This module/node is responsible for handling and abstracting out the complexities of communication to the PX4 FCU via MAVLink. 
