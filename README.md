@@ -1,6 +1,6 @@
 # Auto_Nav_Bridge
 
-The bridge module, responsible for low-level FCU communications over MAVLink protocol, and for arming, disarming, and mode switching functionalities.
+The Bridge module, responsible for low-level FCU communications over MAVLink protocol, and for arming, disarming, and mode switching functionalities.
 
 ## Description
 This module/node is responsible for handling and abstracting out the complexities of communication to the PX4 FCU via MAVLink. 
